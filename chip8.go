@@ -154,10 +154,22 @@ func (chip *Chip8) decodeAndExecute() {
 		// ADD VX, byte
 		chip.addByte(X, NN)
 
-	// TODO: 8XY0
-	// 8XY1
-	// 8XY2
-	// 8XY3
+	case 0x8000: // 8XY0, 8XY1, 8XY2, 8XY3
+
+		switch N {
+		case 0x0:
+			// LD VX, VY
+			chip.ldReg(X, Y)
+		case 0x1:
+			// OR VX, VY
+			chip.orReg(X, Y)
+		case 0x2:
+			// AND VX, VY
+			chip.andReg(X, Y)
+		case 0x3:
+			// XOR VX, VY
+			chip.xorReg(X, Y)
+		}	
 	// 8XY4
 	// 8XY5
 	// 8XY6
@@ -243,7 +255,29 @@ func (chip *Chip8) addByte(X, NN uint16) {
 	chip.V[X] += byte(NN)
 }
 
-// TODO...
+// LD VX, VY
+// set VX = VY
+func (chip *Chip8) ldReg(X, Y uint16) {
+	chip.V[X] = chip.V[Y]
+}
+
+// OR VX, VY
+// set VX = VX OR VY
+func (chip *Chip8) orReg(X, Y uint16) {
+	chip.V[X] |= chip.V[Y]
+}
+
+// AND VX, VY
+// set VX = VX AND VY
+func (chip *Chip8) andReg(X, Y uint16) {
+	chip.V[X] &= chip.V[Y]
+}
+
+// XOR VX, VY
+// set VX = VX XOR VY
+func (chip *Chip8) xorReg(X, Y uint16) {
+	chip.V[X] ^= chip.V[Y]
+}
 
 // LD I, addr
 // set I = NNN
